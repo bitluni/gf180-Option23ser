@@ -44,7 +44,7 @@ always@(posedge clk or posedge reset) begin
     end
 end 
 
-always @ (buffer[7:6] or selectedColumn) begin
+always @ (buffer[7:6] or selectedColumn or bank) begin
 if(bank[buffer[7:6]])
     io_out <= customChars[selectedColumn + : 8];
 else
