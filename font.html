@@ -1,0 +1,77 @@
+<head>
+	<script>
+		function convert()
+		{
+			let canvas = document.getElementById("c");
+			let image = document.getElementById("i");
+			let result = document.getElementById("r");
+			let ctx = canvas.getContext("2d", {willReadFrequently: true });
+			ctx.drawImage(image, 0, 0);
+			let text = "";
+			const offset = 0;
+			const count = 256;
+			const whitelist = "!\"#  %'   +,-./0123456789:;   ?@ABCDEFGHIJKLMNOPQRSTUVWXYZ     ";
+//			const whitelist = "!\"#%'+,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//			const whitelist = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^";
+			let set = {};
+//			const whitelist = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+			/*for(let i = 0; i < count; i++)
+			{
+				let x0 = ((i + offset) * 8) & 255;
+				let y0 = (((i + offset) * 8) >> 8) * 8;
+				let data = ctx.getImageData(x0, y0, 8, 8);
+				for(let x = 0; x < 8; x++)
+				{
+					let line = "";
+					for(let y = 0; y < 8; y++)
+					{
+						let p = y * 8 + x;
+						if(data.data[4 * p] == 0)
+							line = "1" + line;
+						else
+							line = "0" + line;
+					}
+					if(x > 0 || i > 0) 
+						text = "\t8'b" + line + ",<br>" + text;
+					else
+						text = "\t8'b" + line + "<br>" + text;
+				}
+			}
+			result.innerHTML = "localparam [" + (count * 8 - 1) + ":0][7:0] rom = {<br>" + text + "};";*/
+			let list = "";
+			for(let i = 0; i < count; i++)
+			{
+				list += String.fromCharCode(i + offset);
+				let x0 = ((i + offset) * 8) & 255;
+				let y0 = (((i + offset) * 8) >> 8) * 8;
+				let data = ctx.getImageData(x0, y0, 8, 8);
+				for(let x = 0; x < 8; x++)
+				{
+					let n = (i * 8 + x).toString(2);
+					let line = "";
+					for(let y = 0; y < 8; y++)
+						//if(whitelist.indexOf(String.fromCharCode(i + offset)) >= 0)
+						{
+							let p = y * 8 + x;
+							if(data.data[4 * p] == 0)
+								line = "1" + line;
+							else
+								line = "0" + line;
+						}
+						//else
+						//	line = "0" + line;
+					set[line] = true;
+					if(line != "00000000")
+						text += "\t11'b" + "00000000000".substr(n.length) + n + ": io_out <= 8'b" + line + ";<br>";
+				}
+			}
+			console.log(Object.keys(set).length);
+			result.innerHTML = list+"<br>"+"case({face,index})<br>" + text + "default: io_out <= 8'b00000000;<br>endcase;<br>";
+		}
+	</script>
+</head>
+<body onload="convert();">
+	<img id="i" src="data:image/png;base64,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">
+	<canvas id="c" width="256" height="128"></canvas><br>
+	<code id="r"></code>
+</body>
