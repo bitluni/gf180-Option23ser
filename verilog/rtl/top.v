@@ -19,7 +19,6 @@ reg [8 * 8 * 256 - 1: 0] customChars;
 wire writeBuffer = (write && bank == 4'b0000);
 wire writeCustom = (write && bank != 4'b0000);
 wire shiftBuffer = (counter[2:0] == 3'b111);
-wire customColumn = {};
 wire [10:0] selectedColumn = {buffer[7:0], counter[2:0]};
 
 always@(posedge clk or posedge reset) begin
