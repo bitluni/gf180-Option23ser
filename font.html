@@ -67,6 +67,15 @@
 			}
 			console.log(Object.keys(set).length);
 			result.innerHTML = list+"<br>"+"case({face,index})<br>" + text + "default: io_out <= 8'b00000000;<br>endcase;<br>";
+			text = "";
+			const msg="bitluni was here, lol!";
+			for(let i = 0; i < msg.length; i++)
+			{
+				let n = (i).toString(2);
+				let ch = msg.charCodeAt(i).toString(2);
+				text += "\t8'b" + "00000000".substr(n.length) + n + ": io_out <= 8'b" + "00000000".substr(ch.length) + ch + ";<br>";
+			}
+			result.innerHTML = "<br>"+"case(count)<br>" + text + "default: io_out <= 8'b00000000;<br>endcase;<br>";
 		}
 	</script>
 </head>

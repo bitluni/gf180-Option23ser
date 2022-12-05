@@ -17,8 +17,8 @@ documentation:
   discord:      "bitluni#0204"      # Your discord handle - make sure to include the # part as well
   title:        "Option23 Serial Max"      # Project title
   description:  "Character ROM and bitmap shifter for POV displays"      # Short description of what your project does
-  how_it_works: "clock: clocks out character columns or shifts in data. Data is 8bits LSB first. write mode will write either into selected character face banks or string buffer if bank = b0000"      # Longer description of how the project works
-  how_to_test:  "Reset counters with reset = 1 and one clock cycle. Shift in some 8 bit (LSB) ASCII string with io bank = 0b0000, write = 1, din = <string characters>. Set write = 0 and cycle with clock trough the character pixel columns of the string left to write. Using bank bits you can switch the ROM character faces by castom bitmaps. These are shifted in with the corresponding bank bits set. String buffer is is untouched in that case."
+  how_it_works: "clock is used to shift-in in 64 ASCII characters (bank=0) or pixels(bank=1) in write mode. Or output 8x8 pixel characters (bank=0) or a 8x1024 pixel bitmap. msg 0 and msg 1 has to be 0."      # Longer description of how the project works
+  how_to_test:  "Reset counters with reset = 1 and one clock cycle. Shift in some 8 bit (LSB) ASCII string with io bank = 0, write = 1, din = <string characters>. Set write = 0 and cycle with clock trough the character pixel columns of the string left to write. Using bank you can switch to graphics mode and shift-in 1024 columns of 8 pixels and output them later."
   external_hw:  "Pink LEDs"      # Describe any external hardware needed
   language:     "Verilog" # other examples include Verilog, Amaranth, VHDL, etc
   doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
@@ -29,10 +29,10 @@ documentation:
     - reset
     - write
     - din
-    - bank 0
-    - bank 1
-    - bank 2
-    - bank 3
+    - msg 0
+    - msg 1
+    - none
+    - none
   outputs:
     - led 0         # a description of what the outputs do
     - led 1
