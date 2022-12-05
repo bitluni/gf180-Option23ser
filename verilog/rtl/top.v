@@ -23,12 +23,12 @@ wire [10:0] selectedColumn = {buffer[7:0], counter[2:0]};
 
 always@(posedge clk or posedge reset) begin
     if(reset)
-        counter <= 3'd0;
+        counter <= 12'd0;
     else begin
         if(shiftBuffer && !writeBuffer)
             buffer[MSB:0] <= {buffer[7:0], buffer[MSB:8]};
         if(shiftBuffer && writeBuffer)
-            buffer[MSB:0] <= {buffer[7:0], din, buffer[MSB-7:8]};
+            buffer[MSB:0] <= {buffer[7:0], din, buffer[MSB:MSB-6], buffer[MSB-8:8]};
         if(!shiftBuffer && writeBuffer)
             buffer[MSB:0] <= {din, buffer[MSB:MSB-6], buffer[MSB-8:0]};
 
@@ -46,7 +46,7 @@ end
 
 always @ (buffer[7:6] or selectedColumn or bank) begin
 if(bank[buffer[7:6]])
-    io_out <= customChars[selectedColumn + : 8];
+    io_out <= customChars[{selectedColumn, 3'b000} +: 8];
 else
     case(selectedColumn)
         11'b00000001000: io_out <= 8'b01111110;
