@@ -19,6 +19,8 @@ reg [8 * 8 * 256 - 1: 0] customChars;
 wire writeBuffer = (write && bank == 4'b0000);
 wire writeCustom = (write && bank != 4'b0000);
 wire shiftBuffer = (counter[2:0] == 3'b111);
+wire customColumn = {};
+wire selectedColumn = {buffer[7:0], counter[2:0]};
 
 always@(posedge clk or posedge reset) begin
     if(reset)
@@ -43,11 +45,11 @@ always@(posedge clk or posedge reset) begin
     end
 end 
 
-always @ (buffer[7:0] or bank or counter) begin
+always @ (buffer[7:6] or selectedColumn) begin
 if(bank[buffer[7:6]])
-    io_out <= customChars[{buffer[7:0], counter[2:0]} + : 8];
+    io_out <= customChars[selectedColumn + : 8];
 else
-    case({buffer[7:0], counter[2:0]})
+    case(selectedColumn)
         11'b00000001000: io_out <= 8'b01111110;
         11'b00000001001: io_out <= 8'b10000001;
         11'b00000001010: io_out <= 8'b10010101;
