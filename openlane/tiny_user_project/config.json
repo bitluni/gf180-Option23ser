@@ -7,13 +7,13 @@
         "dir::../../verilog/rtl/defines.v",
         "dir::../../verilog/rtl/tiny_user_project.v"
     ],
-    "CLOCK_PERIOD": 24,
+    "CLOCK_PERIOD": 100,
     "CLOCK_PORT": "",
     "CLOCK_NET": "",
     "FP_SIZING": "absolute",
-    "DIE_AREA": "0 0 2000 2000",
+    "DIE_AREA": "0 0 2500 2500",
     "PL_BASIC_PLACEMENT": 0,
-    "PL_TARGET_DENSITY": 0.50,
+    "PL_TARGET_DENSITY": 0.40,
     "SYNTH_USE_PG_PINS_DEFINES": "USE_POWER_PINS",
     "VDD_NETS": [
         "vdd"
