@@ -12,9 +12,9 @@ wire din = io_in[3];
 wire bank = io_in[4];
 wire msg = io_in[5]^io_in[6];
 
-reg [12:0] counter;
+reg [10:0] counter;
 reg [MSB: 0] buffer;
-reg [1024 * 8 - 1: 0] bitmap;
+reg [1024 * 2 - 1: 0] bitmap;
 
 wire writeBuffer = (write && !bank);
 wire writeCustom = (write && bank);
@@ -23,7 +23,7 @@ wire [10:0] selectedColumn = {buffer[7:0], counter[2:0]};
 
 always@(posedge clk or posedge reset) begin
     if(reset)
-        counter <= 13'd0;
+        counter <= 11'd0;
     else begin
         if(shiftBuffer && !writeBuffer)
             buffer[MSB:0] <= {buffer[7:0], buffer[MSB:8]};
@@ -40,7 +40,7 @@ end
 
 always @ (counter or selectedColumn or bank or msg) begin
     if(bank)
-        io_out <= bitmap[{counter, 3'b000} +: 8];
+        io_out <= bitmap[{counter[10:0], 3'b000} +: 8];
     else if(!msg) begin
         case(selectedColumn)
             11'b00000001000: io_out <= 8'b01111110;
